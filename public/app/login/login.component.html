@@ -1,0 +1,19 @@
+<style>
+    input.ng-invalid.ng-dirty {
+        border: 3px red solid;
+    }
+</style>
+
+<h2>Log In</h2>
+<form (ngSubmit)="login()" [formGroup]="userForm">
+    <div>
+        <label>Username</label><input formControlName="username">
+        <div *ngIf="usernameCtrl.dirty && usernameCtrl.hasError('required')">Username is required</div>
+        <div *ngIf="usernameCtrl.dirty && usernameCtrl.hasError('minlength')">Username should be 3 characters min</div>
+    </div>
+    <div>
+        <label>Password</label><input type="password" formControlName="password">
+        <div *ngIf="passwordCtrl.dirty && passwordCtrl.hasError('required')">Password is required</div>
+    </div>
+    <button type="submit" [disabled]="!userForm.valid">Iniciar sesión</button>
+</form>

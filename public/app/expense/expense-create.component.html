@@ -1,0 +1,34 @@
+<style>
+    input.ng-invalid.ng-dirty {
+        border: 3px red solid;
+    }
+</style>
+
+<h2>Nuevo gasto</h2>
+<form (ngSubmit)="createExpense()" [formGroup]="expenseForm">
+    <div>
+        <label>Categoría:</label>
+        <select class="ui search dropdown" formControlName="category">
+            <option value="Transporte">Transporte</option>
+            <option value="Alimentos">Alimentos</option>
+            <option value="Vivienda">Vivienda</option>
+            <option value="Entretenimiento">Entretenimineto</option>
+            <option value="Servicios">Servicios</option>
+            <option value="Mascota">Mascota</option>
+            <option value="Deudas">Deudas</option>
+            <option value="Familia">Familia</option>
+        </select>
+    </div>
+     <div>
+        <label>Descripción:</label><textarea formControlName="description"></textarea>
+        <div *ngIf="descriptionCtrl.dirty && descriptionCtrl.hasError('required')">Descripción es requerida</div>
+        <div *ngIf="descriptionCtrl.dirty && descriptionCtrl.hasError('minlength')">Descripción muy corta</div>
+    </div>
+    <div>
+        <label>Cantidad</label>
+        <input type="number" formControlName="amount">
+        <div *ngIf="amountCtrl.dirty && amountCtrl.hasError('required')">Es necesario ingresar una cantidad.</div>
+    </div>
+   
+    <button type="submit" [disabled]="!expenseForm.valid">Agregar gasto</button>
+</form>
