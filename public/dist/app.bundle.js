@@ -34,16 +34,16 @@ webpackJsonp([0],{
 	var forms_1 = __webpack_require__(27);
 	var index_3 = __webpack_require__(31);
 	var router_1 = __webpack_require__(36);
-	var app_routing_1 = __webpack_require__(67);
-	var index_4 = __webpack_require__(68);
-	var ng_semantic_1 = __webpack_require__(70);
+	var app_routing_1 = __webpack_require__(68);
+	var index_4 = __webpack_require__(69);
+	var ng_semantic_1 = __webpack_require__(71);
 	var AppModule = (function () {
 	    function AppModule() {
 	    }
 	    AppModule = __decorate([
 	        core_1.NgModule({
 	            imports: [platform_browser_1.BrowserModule, ng_semantic_1.NgSemanticModule, forms_1.FormsModule, forms_1.ReactiveFormsModule, http_1.HttpModule, router_1.RouterModule.forRoot(app_routing_1.ROUTES)],
-	            declarations: [app_component_1.AppComponent, login_component_1.LoginFormComponent, index_1.HomeComponent, index_2.ExpenseFormCreate],
+	            declarations: [app_component_1.AppComponent, login_component_1.LoginFormComponent, index_1.HomeComponent, index_2.ExpenseFormCreate, index_2.ExpenseComponent],
 	            providers: [index_3.AuthenticationService, index_3.ExpenseService, index_4.AuthGuard],
 	            bootstrap: [app_component_1.AppComponent]
 	        }), 
@@ -235,12 +235,22 @@ webpackJsonp([0],{
 	        this.http = http;
 	    }
 	    ExpenseService.prototype.getExpenses = function () {
+	        var _this = this;
 	        var headers = new http_1.Headers({ 'Authorization': this.authenticationService.token });
 	        var options = new http_1.RequestOptions({ headers: headers });
 	        return this.http.get('/api/expense', options)
-	            .map(function (response) { return response.json(); });
+	            .map(function (response) {
+	            _this.expenses = response.json();
+	            if (_this.expenses) {
+	                return true;
+	            }
+	            else {
+	                return false;
+	            }
+	        });
 	    };
 	    ExpenseService.prototype.createExpense = function (body) {
+	        var _this = this;
 	        var bodyString = JSON.stringify(body);
 	        var headers = new http_1.Headers({
 	            'Authorization': this.authenticationService.token,
@@ -251,10 +261,11 @@ webpackJsonp([0],{
 	            .map(function (response) {
 	            var expense = response.json();
 	            if (expense) {
-	                return expense;
+	                _this.expenses.push(expense);
+	                return true;
 	            }
 	            else {
-	                return null;
+	                return false;
 	            }
 	        });
 	    };
@@ -319,6 +330,7 @@ webpackJsonp([0],{
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
 	__export(__webpack_require__(66));
+	__export(__webpack_require__(67));
 
 
 /***/ },
@@ -382,10 +394,53 @@ webpackJsonp([0],{
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(3);
+	var index_1 = __webpack_require__(31);
+	var ExpenseComponent = (function () {
+	    function ExpenseComponent(expenseService) {
+	        this.expenseService = expenseService;
+	        this.expenses = [];
+	    }
+	    ExpenseComponent.prototype.ngOnInit = function () {
+	        var _this = this;
+	        this.expenseService.getExpenses()
+	            .subscribe(function (response) {
+	            if (response) {
+	                _this.expenses = _this.expenseService.expenses;
+	            }
+	        });
+	    };
+	    ExpenseComponent = __decorate([
+	        core_1.Component({
+	            selector: 'ng-expense',
+	            templateUrl: 'app/expense/expense.component.html'
+	        }), 
+	        __metadata('design:paramtypes', [index_1.ExpenseService])
+	    ], ExpenseComponent);
+	    return ExpenseComponent;
+	}());
+	exports.ExpenseComponent = ExpenseComponent;
+
+
+/***/ },
+
+/***/ 68:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
 	var login_component_1 = __webpack_require__(26);
 	var index_1 = __webpack_require__(63);
 	var index_2 = __webpack_require__(65);
-	var index_3 = __webpack_require__(68);
+	var index_3 = __webpack_require__(69);
 	exports.ROUTES = [
 	    { path: 'login', component: login_component_1.LoginFormComponent },
 	    { path: '', component: index_1.HomeComponent, canActivate: [index_3.AuthGuard] },
@@ -397,19 +452,19 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 68:
+/***/ 69:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(69));
+	__export(__webpack_require__(70));
 
 
 /***/ },
 
-/***/ 69:
+/***/ 70:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

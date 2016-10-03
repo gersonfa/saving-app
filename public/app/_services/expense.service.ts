@@ -8,20 +8,29 @@ import { Expense } from '../_models/expense';
 
 @Injectable()
 export class ExpenseService {
+    public expenses: Expense[];
+
     constructor(
         private authenticationService: AuthenticationService,
         private http: Http
     ){}
 
-    getExpenses(): Observable<Expense[]>{
+    getExpenses(): Observable<Boolean>{
         let headers = new Headers({'Authorization': this.authenticationService.token});
         let options = new RequestOptions({headers:headers});
 
         return this.http.get('/api/expense', options)
-            .map((response: Response) => response.json());
+            .map((response: Response) => {
+                this.expenses = response.json();
+                if(this.expenses){
+                    return true;
+                } else {
+                    return false;
+                }
+            });
     }
 
-    createExpense(body: Object): Observable<Expense[]>{
+    createExpense(body: Object): Observable<Boolean>{
         let bodyString = JSON.stringify(body);
         let headers = new Headers({
             'Authorization': this.authenticationService.token,
@@ -33,9 +42,10 @@ export class ExpenseService {
             .map((response: Response) => {
                 let expense = response.json();
                 if(expense){
-                    return expense;
+                    this.expenses.push(expense);
+                    return true;
                 } else {
-                    return null;
+                    return false;
                 }
             });
 
