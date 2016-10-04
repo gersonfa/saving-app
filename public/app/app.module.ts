@@ -11,11 +11,13 @@ import { RouterModule } from '@angular/router';
 import { ROUTES } from './app.routing';
 import { AuthGuard } from './_guards/index';
 import { NgSemanticModule } from 'ng-semantic';
+import { ChartsModule } from 'ng2-charts/ng2-charts';
+import { LineChartComponent } from './charts/index';
 
 
 @NgModule({
-    imports: [BrowserModule, NgSemanticModule, FormsModule, ReactiveFormsModule, HttpModule, RouterModule.forRoot(ROUTES)],
-    declarations: [AppComponent, LoginFormComponent, HomeComponent, ExpenseFormCreate, ExpenseComponent],
+    imports: [BrowserModule, NgSemanticModule, FormsModule, ReactiveFormsModule, HttpModule, ChartsModule, RouterModule.forRoot(ROUTES)],
+    declarations: [AppComponent, LoginFormComponent, HomeComponent, ExpenseFormCreate, ExpenseComponent, LineChartComponent],
     providers: [AuthenticationService, ExpenseService, AuthGuard],
     bootstrap: [AppComponent]
 })

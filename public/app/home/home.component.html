@@ -1,10 +1,22 @@
-<h1>Home</h1>
-<p>Estas en el home</p>
-<a href="" routerLink="/expense/create">
-    <button class="ui basic button">
-        <i class="icon Plus"></i>
-        Agregar gasto.
-    </button>
-</a>
 
-<ng-expense></ng-expense>
+<div class="ui grid">
+    <div class="three wide column centered">
+        <h1>Home</h1>
+        <p>Presupuesto: </p>
+        <p>Gastado:</p>
+        <p>Meta de ahorro:</p>
+        <p>Dinero ahorrado:</p>
+        <p>Ahorro mensual:</p>
+        <p>Faltan 20 meses para llegar a la meta.</p>
+        <a href="" routerLink="/expense/create">
+            <button class="ui basic button" style="position: absolute; bottom: 0;">
+                <i class="icon Plus"></i>
+                Agregar gasto.
+            </button>
+        </a>
+    </div>
+    <div class="eleven wide column centered">
+        <ng-expense></ng-expense>
+        <line-chart></line-chart>
+    </div>
+</div>

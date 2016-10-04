@@ -11,3 +11,4 @@ import '@angular/platform-browser-dynamic';
 import '@angular/router';
 import '@angular/forms';
 import 'ng-semantic';
+import 'chart.js';
