@@ -1,2 +1,22 @@
 <h1>Gastos</h1>
-<p *ngFor="let expense of expenses">{{expense.category}} | {{expense.description}} | {{expense.amount}} | {{expense.createdAt}}</p>
+<table class="ui green table">
+  <thead>
+    <tr>
+        <th>Categoría</th>
+        <th>Descripción</th>
+        <th>Costo</th>
+        <th>Fecha</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr *ngFor="let expense of expenses">
+          <td>{{expense.category}}</td>
+          <td>{{expense.description}}</td>
+          <td>{{expense.amount | currency:'MXN' }}</td>
+          <td>{{expense.createdAt | date:'dd/MM/yyyy'}}</td>
+      </tr>
+   
+  </tbody>
+</table>
+
+<line-chart></line-chart>

@@ -14,15 +14,27 @@ function generateToken(user){
 function setUserInfo(user){
     let getUserInfo = {
         _id : user._id,
-        email : user.email
+        email : user.email,
     };
     return getUserInfo;
 }
 
+function userInfoForSend(user){
+    return {
+        email : user.email,
+        budget : user.finances.budget,
+        savingGoal : user.finances.savingGoal,
+        savingMonth : user.finances.savingMonth,
+        name : user.profile.name,
+        lastname : user.profile.lastname
+    };
+}
+
 exports.login = function(req, res, next){
-    let userInfo = setUserInfo(req.user);
+    let userInfoForToken = setUserInfo(req.user);
+    let userInfo = userInfoForSend(req.user);
     res.status(200).json({
-        token: 'JWT ' + generateToken(userInfo),
+        token: 'JWT ' + generateToken(userInfoForToken),
         user : userInfo
     });
 }

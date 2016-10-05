@@ -4,6 +4,7 @@ const passport = require('passport');
 
 const AuthenticationCtrl = require('../controllers/authentication');
 const ExpenseCtrl = require('../controllers/expense');
+const UserCtrl = require('../controllers/user');
 
 const requireAuth = passport.authenticate('jwt', { session : false});
 const requireLogin = passport.authenticate('local', { session: false});
@@ -12,7 +13,8 @@ module.exports = function(app){
     
     const apiRoutes = express.Router(),
           authRoutes = express.Router(),
-          expenseRouter = express.Router()
+          expenseRouter = express.Router(),
+          userRouter = express.Router()
 
     apiRoutes.use('/auth', authRoutes);
     authRoutes.post('/register', AuthenticationCtrl.registerUser);
@@ -22,7 +24,10 @@ module.exports = function(app){
     expenseRouter.get('/',requireAuth, ExpenseCtrl.expenseGetAll);
     expenseRouter.post('/',requireAuth, ExpenseCtrl.expenseCreate);
     expenseRouter.put('/:expenseid',requireAuth, ExpenseCtrl.expenseUpdate);
-    expenseRouter.delete('/:expenseid',requireAuth, ExpenseCtrl.expenseDelete); 
+    expenseRouter.delete('/:expenseid',requireAuth, ExpenseCtrl.expenseDelete);
+
+    apiRoutes.use('/user', userRouter);
+    userRouter.post('/',requireAuth, UserCtrl.updateInfo); 
 
 
     app.use('/api', apiRoutes);

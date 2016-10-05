@@ -31,22 +31,23 @@ webpackJsonp([0],{
 	var login_component_1 = __webpack_require__(26);
 	var index_1 = __webpack_require__(63);
 	var index_2 = __webpack_require__(65);
+	var index_3 = __webpack_require__(67);
 	var forms_1 = __webpack_require__(27);
-	var index_3 = __webpack_require__(31);
+	var index_4 = __webpack_require__(31);
 	var router_1 = __webpack_require__(36);
-	var app_routing_1 = __webpack_require__(68);
-	var index_4 = __webpack_require__(69);
-	var ng_semantic_1 = __webpack_require__(71);
-	var ng2_charts_1 = __webpack_require__(107);
-	var index_5 = __webpack_require__(109);
+	var app_routing_1 = __webpack_require__(70);
+	var index_5 = __webpack_require__(71);
+	var ng_semantic_1 = __webpack_require__(73);
+	var ng2_charts_1 = __webpack_require__(109);
+	var index_6 = __webpack_require__(111);
 	var AppModule = (function () {
 	    function AppModule() {
 	    }
 	    AppModule = __decorate([
 	        core_1.NgModule({
 	            imports: [platform_browser_1.BrowserModule, ng_semantic_1.NgSemanticModule, forms_1.FormsModule, forms_1.ReactiveFormsModule, http_1.HttpModule, ng2_charts_1.ChartsModule, router_1.RouterModule.forRoot(app_routing_1.ROUTES)],
-	            declarations: [app_component_1.AppComponent, login_component_1.LoginFormComponent, index_1.HomeComponent, index_2.ExpenseFormCreate, index_2.ExpenseComponent, index_5.LineChartComponent],
-	            providers: [index_3.AuthenticationService, index_3.ExpenseService, index_4.AuthGuard],
+	            declarations: [app_component_1.AppComponent, login_component_1.LoginFormComponent, index_1.HomeComponent, index_2.UserComponent, index_3.ExpenseFormCreate, index_3.ExpenseComponent, index_6.LineChartComponent],
+	            providers: [index_4.AuthenticationService, index_4.ExpenseService, index_5.AuthGuard],
 	            bootstrap: [app_component_1.AppComponent]
 	        }), 
 	        __metadata('design:paramtypes', [])
@@ -193,9 +194,49 @@ webpackJsonp([0],{
 	        return this.http.post('/api/auth/login', JSON.stringify({ email: email, password: password }), options)
 	            .map(function (response) {
 	            var token = response.json() && response.json().token;
+	            var user = response.json() && response.json().user;
 	            if (token) {
 	                _this.token = token;
-	                localStorage.setItem('currentUser', JSON.stringify({ email: email, token: token }));
+	                localStorage.setItem('currentUser', JSON.stringify({
+	                    token: token,
+	                    email: email,
+	                    name: user.name + ' ' + user.lastname,
+	                    budget: user.budget,
+	                    savingGoal: user.savingGoal,
+	                    savingMonth: user.savingMonth
+	                }));
+	                return true;
+	            }
+	            else {
+	                return false;
+	            }
+	        });
+	    };
+	    AuthenticationService.prototype.userInfoUpdate = function (user) {
+	        var _this = this;
+	        var headers = new http_1.Headers({
+	            'Authorization': this.token,
+	            'Content-Type': 'application/json'
+	        });
+	        var options = new http_1.RequestOptions({ headers: headers });
+	        return this.http.post('/api/user', JSON.stringify({
+	            name: user.name,
+	            lastname: user.lastname,
+	            budget: user.budget,
+	            savingGoal: user.savingGoal,
+	            savingMonth: user.savingMonth
+	        }), options)
+	            .map(function (response) {
+	            var user = response.json() && response.json().user;
+	            if (user) {
+	                localStorage.setItem('currentUser', JSON.stringify({
+	                    token: _this.token,
+	                    email: user.email,
+	                    name: user.name + ' ' + user.lastname,
+	                    budget: user.budget,
+	                    savingGoal: user.savingGoal,
+	                    savingMonth: user.savingMonth
+	                }));
 	                return true;
 	            }
 	            else {
@@ -332,12 +373,85 @@ webpackJsonp([0],{
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
 	__export(__webpack_require__(66));
-	__export(__webpack_require__(67));
 
 
 /***/ },
 
 /***/ 66:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(3);
+	var forms_1 = __webpack_require__(27);
+	var index_1 = __webpack_require__(31);
+	var UserComponent = (function () {
+	    function UserComponent(fb, authenticationService) {
+	        this.fb = fb;
+	        this.authenticationService = authenticationService;
+	        this.loading = false;
+	        this.error = '';
+	        this.success = '';
+	        this.nameCtrl = fb.control('', forms_1.Validators.required);
+	        this.lastnameCtrl = fb.control('', forms_1.Validators.required);
+	        this.budgetCtrl = fb.control('', forms_1.Validators.required);
+	        this.savingGoalCtrl = fb.control('', forms_1.Validators.required);
+	        this.savingMonthCtrl = fb.control('', forms_1.Validators.required);
+	        this.userForm = fb.group({
+	            name: this.nameCtrl,
+	            lastname: this.lastnameCtrl,
+	            budget: this.budgetCtrl,
+	            savingGoal: this.savingGoalCtrl,
+	            savingMonth: this.savingMonthCtrl
+	        });
+	    }
+	    UserComponent.prototype.updateUser = function () {
+	        this.loading = false;
+	        this.authenticationService.userInfoUpdate(this.userForm.value)
+	            .subscribe(function (result) {
+	            if (result === true) {
+	                console.log('actualizado correctamente');
+	            }
+	            else {
+	                console.log('error');
+	            }
+	        });
+	    };
+	    UserComponent = __decorate([
+	        core_1.Component({
+	            templateUrl: 'app/user/user.component.html'
+	        }), 
+	        __metadata('design:paramtypes', [forms_1.FormBuilder, index_1.AuthenticationService])
+	    ], UserComponent);
+	    return UserComponent;
+	}());
+	exports.UserComponent = UserComponent;
+
+
+/***/ },
+
+/***/ 67:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	function __export(m) {
+	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+	}
+	__export(__webpack_require__(68));
+	__export(__webpack_require__(69));
+
+
+/***/ },
+
+/***/ 68:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -392,7 +506,7 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 67:
+/***/ 69:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -435,17 +549,21 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 68:
+/***/ 70:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var login_component_1 = __webpack_require__(26);
 	var index_1 = __webpack_require__(63);
-	var index_2 = __webpack_require__(65);
-	var index_3 = __webpack_require__(69);
+	var index_2 = __webpack_require__(67);
+	var index_3 = __webpack_require__(71);
+	var user_component_1 = __webpack_require__(66);
 	exports.ROUTES = [
 	    { path: 'login', component: login_component_1.LoginFormComponent },
-	    { path: '', component: index_1.HomeComponent, canActivate: [index_3.AuthGuard] },
+	    { path: '', component: index_1.HomeComponent, canActivate: [index_3.AuthGuard], children: [
+	            { path: '', component: index_2.ExpenseComponent },
+	            { path: 'user', component: user_component_1.UserComponent }
+	        ] },
 	    { path: 'expense/create', component: index_2.ExpenseFormCreate, canActivate: [index_3.AuthGuard] },
 	    //Otherwise redirect to home
 	    { path: '**', redirectTo: '' }
@@ -454,19 +572,19 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 69:
+/***/ 71:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(70));
+	__export(__webpack_require__(72));
 
 
 /***/ },
 
-/***/ 70:
+/***/ 72:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -503,19 +621,19 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 107:
+/***/ 109:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(108));
+	__export(__webpack_require__(110));
 
 
 /***/ },
 
-/***/ 108:
+/***/ 110:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -782,19 +900,19 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 109:
+/***/ 111:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(110));
+	__export(__webpack_require__(112));
 
 
 /***/ },
 
-/***/ 110:
+/***/ 112:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";

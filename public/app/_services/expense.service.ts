@@ -35,7 +35,7 @@ export class ExpenseService {
         let headers = new Headers({
             'Authorization': this.authenticationService.token,
             'Content-Type': 'application/json'
-    });
+        });
         let options = new RequestOptions({headers:headers});
 
         return this.http.post('/api/expense', bodyString, options)

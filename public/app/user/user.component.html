@@ -1,0 +1,25 @@
+<style>
+    input.ng-invalid.ng-dirty {
+        border: 3px red solid;
+    }
+</style>
+
+<h2>Datos usuario:</h2>
+<form (ngSubmit)="updateUser()" [formGroup]="userForm">
+    <div>
+        <label>Nombre</label><input formControlName="name">
+    </div>
+    <div>
+        <label>Apellido</label><input formControlName="lastname">
+    </div>
+    <div>
+        <label>Presupuesto mensual:</label> <input type="number" formControlName="budget">
+    </div>
+    <div>
+        <label>Meta de ahorro:</label> <input type="number" formControlName="savingGoal">
+    </div>
+    <div>
+        <label>Ahorro mensual:</label> <input type="number" formControlName="savingMonth">
+    </div>
+    <button type="submit" [disabled]="!userForm.valid">Actualizar.</button>
+</form>

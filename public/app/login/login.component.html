@@ -4,16 +4,38 @@
     }
 </style>
 
-<h2>Log In</h2>
-<form (ngSubmit)="login()" [formGroup]="userForm">
-    <div>
-        <label>Username</label><input formControlName="username">
-        <div *ngIf="usernameCtrl.dirty && usernameCtrl.hasError('required')">Username is required</div>
-        <div *ngIf="usernameCtrl.dirty && usernameCtrl.hasError('minlength')">Username should be 3 characters min</div>
+<sm-menu title="Angular2" class="inverted teal" logo="https://ng-semantic.herokuapp.com/demo/assets/images/semantic.png">
+</sm-menu>
+
+<div class="ui grid centered">
+    <div class="four wide column">
+        <div class="ui error message" *ngIf="usernameCtrl.dirty && usernameCtrl.hasError('required')">
+            <div class="header">Email requerido</div>
+            <p>Por favor ingresa una dirección de correo valida.</p>
+        </div>
+
+        <div class="ui error message" *ngIf="usernameCtrl.dirty && usernameCtrl.hasError('minlength')">
+            <div class="header">Email muy corto.</div>
+            <p>Ingresa una dirección de correo valida.</p>
+        </div>
+
+        <div class="ui error message" *ngIf="passwordCtrl.dirty && passwordCtrl.hasError('required')">
+            <div class="header">Ingresa contraseña.</div>
+            <p>Es necesario ingresar contraseña.</p>
+        </div>
+
+        <h1>Inicio de sesión</h1>
+        <form class="ui form" (ngSubmit)="login()" [formGroup]="userForm">
+        <div class="field">
+            <label>Email:</label>
+            <input type="email" formControlName="username">
+        </div>
+        <div class="field">
+            <label>Password</label>
+            <input type="text" formControlName="password">
+        </div>
+        <button class="ui button" type="submit" [disabled]="!userForm.valid">Iniciar sesión</button>
+        </form>
     </div>
-    <div>
-        <label>Password</label><input type="password" formControlName="password">
-        <div *ngIf="passwordCtrl.dirty && passwordCtrl.hasError('required')">Password is required</div>
-    </div>
-    <button type="submit" [disabled]="!userForm.valid">Iniciar sesión</button>
-</form>
+</div>
+

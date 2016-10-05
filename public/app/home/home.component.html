@@ -1,4 +1,23 @@
+<sm-menu title="Angular2" class="inverted teal" logo="https://ng-semantic.herokuapp.com/demo/assets/images/semantic.png">
+    <a sm-item *ngFor="let item of items" [icon]="item.icon">{{item?.title}}</a>
 
+    <sm-menu class="menu right secondary">
+        <a sm-item routerLink="/user"
+            image="http://semantic-ui.com/images/avatar/small/justen.jpg">Gerson Flores</a>
+        <a sm-item icon="sidebar big" (click)="invertedSidebar.show({transition: 'overlay'})"></a>
+        <sm-sidebar class="right vertical sidebar labeled  menu" #invertedSidebar>        
+            <a class="item">
+                <i class="home icon"></i> Home
+            </a>
+            <a class="item">
+                <i class="block layout icon"></i> Topics
+            </a>
+            <a class="item">
+                <i class="smile icon"></i> Friends
+            </a>
+        </sm-sidebar>
+    </sm-menu>
+</sm-menu>
 <div class="ui grid">
     <div class="three wide column centered">
         <h1>Home</h1>
@@ -16,7 +35,6 @@
         </a>
     </div>
     <div class="eleven wide column centered">
-        <ng-expense></ng-expense>
-        <line-chart></line-chart>
+        <router-outlet></router-outlet>
     </div>
 </div>
