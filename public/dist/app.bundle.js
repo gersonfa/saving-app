@@ -46,8 +46,9 @@ webpackJsonp([0],{
 	    AppModule = __decorate([
 	        core_1.NgModule({
 	            imports: [platform_browser_1.BrowserModule, ng_semantic_1.NgSemanticModule, forms_1.FormsModule, forms_1.ReactiveFormsModule, http_1.HttpModule, ng2_charts_1.ChartsModule, router_1.RouterModule.forRoot(app_routing_1.ROUTES)],
-	            declarations: [app_component_1.AppComponent, login_component_1.LoginFormComponent, index_1.HomeComponent, index_2.UserComponent, index_3.ExpenseFormCreate, index_3.ExpenseComponent, index_6.LineChartComponent],
+	            declarations: [app_component_1.AppComponent, login_component_1.LoginFormComponent, index_1.HomeComponent, index_2.UserComponent, index_3.ExpenseFormCreate, index_3.ExpenseComponent, index_6.LineChartComponent, index_6.PieChartComponent],
 	            providers: [index_4.AuthenticationService, index_4.ExpenseService, index_5.AuthGuard],
+	            schemas: [core_1.CUSTOM_ELEMENTS_SCHEMA],
 	            bootstrap: [app_component_1.AppComponent]
 	        }), 
 	        __metadata('design:paramtypes', [])
@@ -908,6 +909,7 @@ webpackJsonp([0],{
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
 	__export(__webpack_require__(112));
+	__export(__webpack_require__(113));
 
 
 /***/ },
@@ -930,36 +932,18 @@ webpackJsonp([0],{
 	    function LineChartComponent() {
 	        // lineChart
 	        this.lineChartData = [
-	            { data: [65, 59, 80, 81, 56, 55, 40], label: 'Series A' },
-	            { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B' },
-	            { data: [18, 48, 77, 9, 100, 27, 40], label: 'Series C' }
+	            { data: [65, 59, 80, 81, 56, 55, 40, 80], label: 'Octubre' }
 	        ];
-	        this.lineChartLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+	        this.lineChartLabels = ['Transporte', 'Alimentos', 'Vivienda', 'Entretenimiento', 'Servicios', 'Mascota', 'Deudas', 'Familia'];
 	        this.lineChartOptions = {
 	            animation: false,
 	            responsive: true
 	        };
 	        this.lineChartColors = [
 	            {
-	                backgroundColor: 'rgba(148,159,177,0.2)',
-	                borderColor: 'rgba(148,159,177,1)',
-	                pointBackgroundColor: 'rgba(148,159,177,1)',
-	                pointBorderColor: '#fff',
-	                pointHoverBackgroundColor: '#fff',
-	                pointHoverBorderColor: 'rgba(148,159,177,0.8)'
-	            },
-	            {
-	                backgroundColor: 'rgba(77,83,96,0.2)',
-	                borderColor: 'rgba(77,83,96,1)',
-	                pointBackgroundColor: 'rgba(77,83,96,1)',
-	                pointBorderColor: '#fff',
-	                pointHoverBackgroundColor: '#fff',
-	                pointHoverBorderColor: 'rgba(77,83,96,1)'
-	            },
-	            {
-	                backgroundColor: 'rgba(148,159,177,0.2)',
-	                borderColor: 'rgba(148,159,177,1)',
-	                pointBackgroundColor: 'rgba(148,159,177,1)',
+	                backgroundColor: 'rgba(210,222,218,0.2)',
+	                borderColor: 'rgba(110,159,144,1)',
+	                pointBackgroundColor: 'rgba(75,134,177,1)',
 	                pointBorderColor: '#fff',
 	                pointHoverBackgroundColor: '#fff',
 	                pointHoverBorderColor: 'rgba(148,159,177,0.8)'
@@ -968,16 +952,6 @@ webpackJsonp([0],{
 	        this.lineChartLegend = true;
 	        this.lineChartType = 'line';
 	    }
-	    LineChartComponent.prototype.randomize = function () {
-	        var _lineChartData = new Array(this.lineChartData.length);
-	        for (var i = 0; i < this.lineChartData.length; i++) {
-	            _lineChartData[i] = { data: new Array(this.lineChartData[i].data.length), label: this.lineChartData[i].label };
-	            for (var j = 0; j < this.lineChartData[i].data.length; j++) {
-	                _lineChartData[i].data[j] = Math.floor((Math.random() * 100) + 1);
-	            }
-	        }
-	        this.lineChartData = _lineChartData;
-	    };
 	    // events
 	    LineChartComponent.prototype.chartClicked = function (e) {
 	        console.log(e);
@@ -995,6 +969,49 @@ webpackJsonp([0],{
 	    return LineChartComponent;
 	}());
 	exports.LineChartComponent = LineChartComponent;
+
+
+/***/ },
+
+/***/ 113:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(3);
+	// webpack html imports
+	var PieChartComponent = (function () {
+	    function PieChartComponent() {
+	        // Pie
+	        this.pieChartLabels = ['Presupuesto', 'Alimentos', 'Familia'];
+	        this.pieChartData = [300, 500, 100];
+	        this.pieChartType = 'pie';
+	    }
+	    // events
+	    PieChartComponent.prototype.chartClicked = function (e) {
+	        console.log(e);
+	    };
+	    PieChartComponent.prototype.chartHovered = function (e) {
+	        console.log(e);
+	    };
+	    PieChartComponent = __decorate([
+	        core_1.Component({
+	            selector: 'pie-chart',
+	            templateUrl: 'app/charts/pie-chart.component.html'
+	        }), 
+	        __metadata('design:paramtypes', [])
+	    ], PieChartComponent);
+	    return PieChartComponent;
+	}());
+	exports.PieChartComponent = PieChartComponent;
 
 
 /***/ }

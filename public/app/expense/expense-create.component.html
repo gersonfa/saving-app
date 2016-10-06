@@ -4,9 +4,8 @@
     }
 </style>
 
-<h2>Nuevo gasto</h2>
-<form (ngSubmit)="createExpense()" [formGroup]="expenseForm">
-    <div>
+<form class="ui form" [formGroup]="expenseForm">
+    <div class="field">
         <label>Categoría:</label>
         <select class="ui search dropdown" formControlName="category">
             <option value="Transporte">Transporte</option>
@@ -19,16 +18,14 @@
             <option value="Familia">Familia</option>
         </select>
     </div>
-     <div>
-        <label>Descripción:</label><textarea formControlName="description"></textarea>
+     <div class="field">
+        <label>Descripción:</label><textarea rows="2" formControlName="description"></textarea>
         <div *ngIf="descriptionCtrl.dirty && descriptionCtrl.hasError('required')">Descripción es requerida</div>
         <div *ngIf="descriptionCtrl.dirty && descriptionCtrl.hasError('minlength')">Descripción muy corta</div>
     </div>
-    <div>
+    <div class="field">
         <label>Cantidad</label>
         <input type="number" formControlName="amount">
         <div *ngIf="amountCtrl.dirty && amountCtrl.hasError('required')">Es necesario ingresar una cantidad.</div>
     </div>
-   
-    <button type="submit" [disabled]="!expenseForm.valid">Agregar gasto</button>
 </form>

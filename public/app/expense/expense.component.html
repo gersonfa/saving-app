@@ -1,22 +1,55 @@
-<h1>Gastos</h1>
-<table class="ui green table">
-  <thead>
-    <tr>
-        <th>Categoría</th>
-        <th>Descripción</th>
-        <th>Costo</th>
-        <th>Fecha</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr *ngFor="let expense of expenses">
-          <td>{{expense.category}}</td>
-          <td>{{expense.description}}</td>
-          <td>{{expense.amount | currency:'MXN' }}</td>
-          <td>{{expense.createdAt | date:'dd/MM/yyyy'}}</td>
-      </tr>
-   
-  </tbody>
-</table>
 
-<line-chart></line-chart>
+<div class="ui grid" style="margin-top: 20px;">
+    <h1>Gastos</h1>
+    <div class="row">
+        <div class="fourteen wide column centered">
+            <table class="ui green table">
+                <thead>
+                    <tr>
+                        <th>Categoría</th>
+                        <th>Descripción</th>
+                        <th>Costo</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let expense of expenses">
+                        <td>{{expense.category}}</td>
+                        <td>{{expense.description}}</td>
+                        <td>{{expense.amount | currency:'MXN' }}</td>
+                        <td>{{expense.createdAt | date:'dd/MM/yyyy'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="two wide column centered">
+            <button class="ui basic button" (click)="modalExpense.show({inverted: true})">
+                <i class="icon plus"></i>
+                Agregar gasto
+            </button>
+            <sm-modal title="Nuevo gasto" class="" #modalExpense>
+                <modal-content>
+                    <expense-create #expenseCreator></expense-create>
+                </modal-content>
+                <modal-actions>
+                    <button class="ui black button" (click)="modalExpense.hide()">Cancelar</button>
+                    <button class="ui teal button" [disabled]="!expenseCreator.expenseForm.valid" (click)="expenseCreator.createExpense() && modalExpense.hide()" >Agregar</button>
+                </modal-actions>
+            </sm-modal>
+        </div>
+    </div>
+
+    <div class="row centered" style="margin-top:5%;">
+        <div class="eight wide column">
+            <h3 style="margin-bottom:10px;">Gastos del mes de Octubre</h3>
+            <line-chart></line-chart>
+        </div>
+        <div class="eight wide column">
+            <h3 style="margin-bottom:10px;">Gastos con respecto al presupuesto mensual</h3>
+            <pie-chart></pie-chart>
+        </div>
+    </div>
+</div>
+
+
+

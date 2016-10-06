@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { LoginFormComponent } from './login/login.component';
@@ -13,13 +13,14 @@ import { ROUTES } from './app.routing';
 import { AuthGuard } from './_guards/index';
 import { NgSemanticModule } from 'ng-semantic';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
-import { LineChartComponent } from './charts/index';
+import { LineChartComponent, PieChartComponent } from './charts/index';
 
 
 @NgModule({
     imports: [BrowserModule, NgSemanticModule, FormsModule, ReactiveFormsModule, HttpModule, ChartsModule, RouterModule.forRoot(ROUTES)],
-    declarations: [AppComponent, LoginFormComponent, HomeComponent, UserComponent, ExpenseFormCreate, ExpenseComponent, LineChartComponent],
+    declarations: [AppComponent, LoginFormComponent, HomeComponent, UserComponent, ExpenseFormCreate, ExpenseComponent, LineChartComponent, PieChartComponent],
     providers: [AuthenticationService, ExpenseService, AuthGuard],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     bootstrap: [AppComponent]
 })
 

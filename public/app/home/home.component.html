@@ -19,22 +19,9 @@
     </sm-menu>
 </sm-menu>
 <div class="ui grid">
-    <div class="three wide column centered">
-        <h1>Home</h1>
-        <p>Presupuesto: </p>
-        <p>Gastado:</p>
-        <p>Meta de ahorro:</p>
-        <p>Dinero ahorrado:</p>
-        <p>Ahorro mensual:</p>
-        <p>Faltan 20 meses para llegar a la meta.</p>
-        <a href="" routerLink="/expense/create">
-            <button class="ui basic button" style="position: absolute; bottom: 0;">
-                <i class="icon Plus"></i>
-                Agregar gasto.
-            </button>
-        </a>
-    </div>
-    <div class="eleven wide column centered">
-        <router-outlet></router-outlet>
+    <div class="row">
+        <div class="fifteen wide column centered">
+            <router-outlet></router-outlet>
+        </div>  
     </div>
 </div>
