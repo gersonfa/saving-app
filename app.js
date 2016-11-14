@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const config = require('./api/config/main');
 const passport = require('passport');
 const router = require('./api/routes/index');
+require("nodejs-dashboard");
 
 mongoose.connect(config.database);
 const port = process.env.PORT || 3000;

@@ -1,0 +1,9 @@
+<div class="four wide column">
+    <form class="ui form" (ngSubmit)="register()" [formGroup]="userForm">
+        <div class="field">
+            <label>Email:</label>
+            <input type="email" formControlName="email">
+            <button class="ui button" type="submit" [disabled]="!userForm.valid">Registrarse</button>
+        </div>
+    </form>
+</div>

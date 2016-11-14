@@ -1,13 +1,62 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ExpenseService } from '../_services/index';
+import { Expense } from '../_models/expense';
 
 @Component({
   selector: 'line-chart',
   templateUrl : 'app/charts/line-chart.component.html'
 })
-export class LineChartComponent {
+export class LineChartComponent implements OnInit {
+  expenses: Expense[] = [];
+  data: number[] = [0,0,0,0,0,0,0,0];
+  
+
+  constructor(
+    private expenseService : ExpenseService
+  ){}
+
+  ngOnInit(){
+    this.expenseService.getExpenses()
+      .subscribe(response => {
+        if(response){
+          this.expenseService.expenses.forEach(x => {
+            console.log(x.category);
+            switch (x.category) {
+              case 'Transporte' :
+                this.data[0] += x.amount;
+                break;
+              case 'Alimentos' :
+                this.data[1] += x.amount;
+                break;
+              case 'Vivienda' :
+                this.data[2] += x.amount;
+                break;
+              case 'Entretenimiento' :
+                this.data[3] += x.amount;
+                break;
+              case 'Servicios' :
+                this.data[4] += x.amount;
+                break;
+              case 'Mascota' :
+                this.data[5] += x.amount;
+                break;
+              case 'Deudas' :
+                this.data[6] += x.amount;
+                break;
+              case 'Familia' :
+                this.data[7] += x.amount;
+                default:
+                  break;
+            }
+          });
+        }
+      })
+      
+  }
+
   // lineChart
   public lineChartData:Array<any> = [
-    {data: [65, 59, 80, 81, 56, 55, 40, 80], label: 'Octubre'}
+    {data: this.data, label: 'Gastos'}
   ];
   public lineChartLabels:Array<any> = ['Transporte','Alimentos', 'Vivienda', 'Entretenimiento', 'Servicios', 'Mascota', 'Deudas', 'Familia'];
   public lineChartOptions:any = {

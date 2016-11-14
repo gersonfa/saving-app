@@ -41,8 +41,4 @@ export class LoginFormComponent {
                 }
             });
     }
-
-    register(user){
-        console.log(this.userForm.value);
-    }
 }

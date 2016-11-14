@@ -33,7 +33,7 @@
                 </modal-content>
                 <modal-actions>
                     <button class="ui black button" (click)="modalExpense.hide()">Cancelar</button>
-                    <button class="ui teal button" [disabled]="!expenseCreator.expenseForm.valid" (click)="expenseCreator.createExpense() && modalExpense.hide()" >Agregar</button>
+                    <button class="ui teal button" [disabled]="!expenseCreator.expenseForm.valid" (click)="expenseCreator.createExpense(); modalExpense.hide(); updateExpenses();" >Agregar</button>
                 </modal-actions>
             </sm-modal>
         </div>
@@ -41,7 +41,7 @@
 
     <div class="row centered" style="margin-top:5%;">
         <div class="eight wide column">
-            <h3 style="margin-bottom:10px;">Gastos del mes de Octubre</h3>
+            <h3 style="margin-bottom:10px;">Gastos totales</h3>
             <line-chart></line-chart>
         </div>
         <div class="eight wide column">

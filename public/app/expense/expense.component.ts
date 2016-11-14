@@ -20,4 +20,8 @@ export class ExpenseComponent implements OnInit {
             })
     }
 
+    updateExpenses(){
+        this.expenses = this.expenseService.expenses;
+    }
+
 }

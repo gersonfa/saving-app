@@ -69,4 +69,27 @@ export class AuthenticationService {
                 }
             });
     }
+
+    register(user): Observable<boolean>{
+        let headers = new Headers({ 'Content-Type': 'application/json' });
+        let options = new RequestOptions({headers: headers});
+        return this.http.post('/api/auth/register', JSON.stringify(user), options)
+            .map((response : Response) => {
+                let token = response.json() && response.json().token;
+                let user = response.json() && response.json().user;
+                if(user){
+                    localStorage.setItem('currenctUser', JSON.stringify({
+                        token : this.token,
+                        email : user.email, 
+                        name : user.name + ' ' + user.lastname,
+                        budget : user.budget,
+                        savingGoal : user.savingGoal,
+                        savingMonth : user.savingMonth
+                    }));
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+    }
 }

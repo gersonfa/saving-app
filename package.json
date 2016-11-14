@@ -4,7 +4,8 @@
   "description": "Aplicación para gestion de finanzas",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodejs-dashboard node app.js"
   },
   "keywords": [
     "saving",
@@ -29,5 +30,9 @@
     "passport-local": "^1.0.0",
     "path": "^0.12.7"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "nodejs-dashboard": "^0.1.0"
+  }
 }
+
+  

@@ -29,25 +29,27 @@ webpackJsonp([0],{
 	var http_1 = __webpack_require__(24);
 	var app_component_1 = __webpack_require__(25);
 	var login_component_1 = __webpack_require__(26);
-	var index_1 = __webpack_require__(63);
-	var index_2 = __webpack_require__(65);
-	var index_3 = __webpack_require__(67);
+	var register_component_1 = __webpack_require__(63);
+	var index_1 = __webpack_require__(64);
+	var index_2 = __webpack_require__(66);
+	var index_3 = __webpack_require__(68);
+	var index_4 = __webpack_require__(70);
 	var forms_1 = __webpack_require__(27);
-	var index_4 = __webpack_require__(31);
+	var index_5 = __webpack_require__(31);
 	var router_1 = __webpack_require__(36);
-	var app_routing_1 = __webpack_require__(70);
-	var index_5 = __webpack_require__(71);
-	var ng_semantic_1 = __webpack_require__(73);
-	var ng2_charts_1 = __webpack_require__(109);
-	var index_6 = __webpack_require__(111);
+	var app_routing_1 = __webpack_require__(73);
+	var index_6 = __webpack_require__(74);
+	var ng_semantic_1 = __webpack_require__(76);
+	var ng2_charts_1 = __webpack_require__(112);
+	var index_7 = __webpack_require__(114);
 	var AppModule = (function () {
 	    function AppModule() {
 	    }
 	    AppModule = __decorate([
 	        core_1.NgModule({
 	            imports: [platform_browser_1.BrowserModule, ng_semantic_1.NgSemanticModule, forms_1.FormsModule, forms_1.ReactiveFormsModule, http_1.HttpModule, ng2_charts_1.ChartsModule, router_1.RouterModule.forRoot(app_routing_1.ROUTES)],
-	            declarations: [app_component_1.AppComponent, login_component_1.LoginFormComponent, index_1.HomeComponent, index_2.UserComponent, index_3.ExpenseFormCreate, index_3.ExpenseComponent, index_6.LineChartComponent, index_6.PieChartComponent],
-	            providers: [index_4.AuthenticationService, index_4.ExpenseService, index_5.AuthGuard],
+	            declarations: [app_component_1.AppComponent, login_component_1.LoginFormComponent, register_component_1.RegisterUserComponent, index_1.HomeComponent, index_2.LoginHomeComponent, index_3.UserComponent, index_4.ExpenseFormCreate, index_4.ExpenseComponent, index_7.LineChartComponent, index_7.PieChartComponent],
+	            providers: [index_5.AuthenticationService, index_5.ExpenseService, index_6.AuthGuard],
 	            schemas: [core_1.CUSTOM_ELEMENTS_SCHEMA],
 	            bootstrap: [app_component_1.AppComponent]
 	        }), 
@@ -135,9 +137,6 @@ webpackJsonp([0],{
 	                _this.loading = false;
 	            }
 	        });
-	    };
-	    LoginFormComponent.prototype.register = function (user) {
-	        console.log(this.userForm.value);
 	    };
 	    LoginFormComponent = __decorate([
 	        core_1.Component({
@@ -245,6 +244,30 @@ webpackJsonp([0],{
 	            }
 	        });
 	    };
+	    AuthenticationService.prototype.register = function (user) {
+	        var _this = this;
+	        var headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+	        var options = new http_1.RequestOptions({ headers: headers });
+	        return this.http.post('/api/auth/register', JSON.stringify(user), options)
+	            .map(function (response) {
+	            var token = response.json() && response.json().token;
+	            var user = response.json() && response.json().user;
+	            if (user) {
+	                localStorage.setItem('currenctUser', JSON.stringify({
+	                    token: _this.token,
+	                    email: user.email,
+	                    name: user.name + ' ' + user.lastname,
+	                    budget: user.budget,
+	                    savingGoal: user.savingGoal,
+	                    savingMonth: user.savingMonth
+	                }));
+	                return true;
+	            }
+	            else {
+	                return false;
+	            }
+	        });
+	    };
 	    AuthenticationService = __decorate([
 	        core_1.Injectable(), 
 	        __metadata('design:paramtypes', [http_1.Http])
@@ -328,15 +351,81 @@ webpackJsonp([0],{
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	function __export(m) {
-	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-	}
-	__export(__webpack_require__(64));
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(3);
+	var forms_1 = __webpack_require__(27);
+	var index_1 = __webpack_require__(31);
+	var router_1 = __webpack_require__(36);
+	var RegisterUserComponent = (function () {
+	    function RegisterUserComponent(fb, authenticationService, router) {
+	        this.fb = fb;
+	        this.authenticationService = authenticationService;
+	        this.router = router;
+	        this.loading = false;
+	        this.error = '';
+	        this.emailCtrl = fb.control('', forms_1.Validators.required);
+	        this.passwordCtrl = fb.control('', forms_1.Validators.required);
+	        this.nameCtrl = fb.control('', forms_1.Validators.required);
+	        this.lastnameCtrl = fb.control('', forms_1.Validators.required);
+	        this.budgetCtrl = fb.control('', forms_1.Validators.required);
+	        this.savingGoalCtrl = fb.control('', forms_1.Validators.required);
+	        this.savingMonth = fb.control('', forms_1.Validators.required);
+	        this.userForm = fb.group({
+	            email: this.emailCtrl,
+	            password: this.passwordCtrl,
+	            name: this.nameCtrl,
+	            lastnameCtrl: this.lastnameCtrl,
+	            budget: this.budgetCtrl,
+	            savingGoal: this.savingGoalCtrl,
+	            savingMonth: this.savingMonth
+	        });
+	    }
+	    RegisterUserComponent.prototype.register = function () {
+	        var _this = this;
+	        this.authenticationService.register(this.userForm.value)
+	            .subscribe(function (result) {
+	            if (result == true) {
+	                _this.router.navigate(['/']);
+	            }
+	            else {
+	                _this.error = 'Error, no se pudo registrar usuario nuevo';
+	            }
+	        });
+	    };
+	    RegisterUserComponent = __decorate([
+	        core_1.Component({
+	            templateUrl: 'app/register/register.component.html'
+	        }), 
+	        __metadata('design:paramtypes', [forms_1.FormBuilder, index_1.AuthenticationService, router_1.Router])
+	    ], RegisterUserComponent);
+	    return RegisterUserComponent;
+	}());
+	exports.RegisterUserComponent = RegisterUserComponent;
 
 
 /***/ },
 
 /***/ 64:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	function __export(m) {
+	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+	}
+	__export(__webpack_require__(65));
+
+
+/***/ },
+
+/***/ 65:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -366,19 +455,61 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 65:
+/***/ 66:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(66));
+	__export(__webpack_require__(67));
 
 
 /***/ },
 
-/***/ 66:
+/***/ 67:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+	    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+	    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+	    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+	    return c > 3 && r && Object.defineProperty(target, key, r), r;
+	};
+	var __metadata = (this && this.__metadata) || function (k, v) {
+	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+	};
+	var core_1 = __webpack_require__(3);
+	var LoginHomeComponent = (function () {
+	    function LoginHomeComponent() {
+	    }
+	    LoginHomeComponent = __decorate([
+	        core_1.Component({
+	            templateUrl: 'app/loginhome/loginhome.component.html'
+	        }), 
+	        __metadata('design:paramtypes', [])
+	    ], LoginHomeComponent);
+	    return LoginHomeComponent;
+	}());
+	exports.LoginHomeComponent = LoginHomeComponent;
+
+
+/***/ },
+
+/***/ 68:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	function __export(m) {
+	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+	}
+	__export(__webpack_require__(69));
+
+
+/***/ },
+
+/***/ 69:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -439,20 +570,20 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 67:
+/***/ 70:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(68));
-	__export(__webpack_require__(69));
+	__export(__webpack_require__(71));
+	__export(__webpack_require__(72));
 
 
 /***/ },
 
-/***/ 68:
+/***/ 71:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -507,7 +638,7 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 69:
+/***/ 72:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -536,6 +667,9 @@ webpackJsonp([0],{
 	            }
 	        });
 	    };
+	    ExpenseComponent.prototype.updateExpenses = function () {
+	        this.expenses = this.expenseService.expenses;
+	    };
 	    ExpenseComponent = __decorate([
 	        core_1.Component({
 	            selector: 'ng-expense',
@@ -550,21 +684,21 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 70:
+/***/ 73:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	var login_component_1 = __webpack_require__(26);
-	var index_1 = __webpack_require__(63);
-	var index_2 = __webpack_require__(67);
-	var index_3 = __webpack_require__(71);
-	var user_component_1 = __webpack_require__(66);
+	var index_1 = __webpack_require__(64);
+	var index_2 = __webpack_require__(70);
+	var index_3 = __webpack_require__(74);
+	var user_component_1 = __webpack_require__(69);
 	exports.ROUTES = [
-	    { path: 'login', component: login_component_1.LoginFormComponent },
 	    { path: '', component: index_1.HomeComponent, canActivate: [index_3.AuthGuard], children: [
 	            { path: '', component: index_2.ExpenseComponent },
 	            { path: 'user', component: user_component_1.UserComponent }
 	        ] },
+	    { path: 'login', component: login_component_1.LoginFormComponent },
 	    { path: 'expense/create', component: index_2.ExpenseFormCreate, canActivate: [index_3.AuthGuard] },
 	    //Otherwise redirect to home
 	    { path: '**', redirectTo: '' }
@@ -573,19 +707,19 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 71:
+/***/ 74:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(72));
+	__export(__webpack_require__(75));
 
 
 /***/ },
 
-/***/ 72:
+/***/ 75:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -622,19 +756,19 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 109:
+/***/ 112:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(110));
+	__export(__webpack_require__(113));
 
 
 /***/ },
 
-/***/ 110:
+/***/ 113:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -901,20 +1035,20 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 111:
+/***/ 114:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	function __export(m) {
 	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 	}
-	__export(__webpack_require__(112));
-	__export(__webpack_require__(113));
+	__export(__webpack_require__(115));
+	__export(__webpack_require__(116));
 
 
 /***/ },
 
-/***/ 112:
+/***/ 115:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -928,11 +1062,15 @@ webpackJsonp([0],{
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(3);
+	var index_1 = __webpack_require__(31);
 	var LineChartComponent = (function () {
-	    function LineChartComponent() {
+	    function LineChartComponent(expenseService) {
+	        this.expenseService = expenseService;
+	        this.expenses = [];
+	        this.data = [0, 0, 0, 0, 0, 0, 0, 0];
 	        // lineChart
 	        this.lineChartData = [
-	            { data: [65, 59, 80, 81, 56, 55, 40, 80], label: 'Octubre' }
+	            { data: this.data, label: 'Gastos' }
 	        ];
 	        this.lineChartLabels = ['Transporte', 'Alimentos', 'Vivienda', 'Entretenimiento', 'Servicios', 'Mascota', 'Deudas', 'Familia'];
 	        this.lineChartOptions = {
@@ -952,6 +1090,44 @@ webpackJsonp([0],{
 	        this.lineChartLegend = true;
 	        this.lineChartType = 'line';
 	    }
+	    LineChartComponent.prototype.ngOnInit = function () {
+	        var _this = this;
+	        this.expenseService.getExpenses()
+	            .subscribe(function (response) {
+	            if (response) {
+	                _this.expenseService.expenses.forEach(function (x) {
+	                    console.log(x.category);
+	                    switch (x.category) {
+	                        case 'Transporte':
+	                            _this.data[0] += x.amount;
+	                            break;
+	                        case 'Alimentos':
+	                            _this.data[1] += x.amount;
+	                            break;
+	                        case 'Vivienda':
+	                            _this.data[2] += x.amount;
+	                            break;
+	                        case 'Entretenimiento':
+	                            _this.data[3] += x.amount;
+	                            break;
+	                        case 'Servicios':
+	                            _this.data[4] += x.amount;
+	                            break;
+	                        case 'Mascota':
+	                            _this.data[5] += x.amount;
+	                            break;
+	                        case 'Deudas':
+	                            _this.data[6] += x.amount;
+	                            break;
+	                        case 'Familia':
+	                            _this.data[7] += x.amount;
+	                        default:
+	                            break;
+	                    }
+	                });
+	            }
+	        });
+	    };
 	    // events
 	    LineChartComponent.prototype.chartClicked = function (e) {
 	        console.log(e);
@@ -964,7 +1140,7 @@ webpackJsonp([0],{
 	            selector: 'line-chart',
 	            templateUrl: 'app/charts/line-chart.component.html'
 	        }), 
-	        __metadata('design:paramtypes', [])
+	        __metadata('design:paramtypes', [index_1.ExpenseService])
 	    ], LineChartComponent);
 	    return LineChartComponent;
 	}());
@@ -973,7 +1149,7 @@ webpackJsonp([0],{
 
 /***/ },
 
-/***/ 113:
+/***/ 116:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
