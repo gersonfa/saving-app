@@ -1,5 +1,8 @@
-<base-chart class="chart"
+
+<div *ngIf="dataAvailable">
+    <base-chart class="chart"
            [data]="pieChartData"
            [labels]="pieChartLabels"
            [chartType]="pieChartType"
            ></base-chart>
+</div>

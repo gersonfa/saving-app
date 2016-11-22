@@ -1,4 +1,7 @@
-<base-chart class="chart"
+
+  
+<div *ngIf="dataAvailable">
+        <base-chart class="chart"
         [datasets]="lineChartData"
         [labels]="lineChartLabels"
         [options]="lineChartOptions"
@@ -6,4 +9,4 @@
         [legend]="lineChartLegend"
         [chartType]="lineChartType"
         ></base-chart>
-  
+</div>

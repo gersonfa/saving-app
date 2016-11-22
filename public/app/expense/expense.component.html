@@ -10,6 +10,7 @@
                         <th>Descripción</th>
                         <th>Costo</th>
                         <th>Fecha</th>
+                        <th>Opciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -18,9 +19,20 @@
                         <td>{{expense.description}}</td>
                         <td>{{expense.amount | currency:'MXN' }}</td>
                         <td>{{expense.createdAt | date:'dd/MM/yyyy'}}</td>
+                        <td><a (click)="modalDelete.show({inverted:true})"><i class="trash icon"></i></a></td>
+                        <sm-modal title="Eliminar gasto" class="" #modalDelete>
+                            <modal-content>
+                                <p>¿Estas seguro que quieres eliminar el gasto?</p>
+                            </modal-content>
+                            <modal-actions>
+                                <button class="ui black button" (click)="modalDelete.hide()">Cancelar</button>
+                                <button class="ui teal button"  (click)="expenseDelete(expense); modalDelete.hide() " >Eliminar</button>
+                            </modal-actions>
+                        </sm-modal>
                     </tr>
                 </tbody>
             </table>
+            
         </div>
         <div class="two wide column centered">
             <button class="ui basic button" (click)="modalExpense.show({inverted: true})">
@@ -45,7 +57,7 @@
             <line-chart></line-chart>
         </div>
         <div class="eight wide column">
-            <h3 style="margin-bottom:10px;">Gastos con respecto al presupuesto mensual</h3>
+            <h3 style="margin-bottom:10px;">Gastos en el mes.</h3>
             <pie-chart></pie-chart>
         </div>
     </div>

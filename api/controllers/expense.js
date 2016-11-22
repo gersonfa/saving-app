@@ -100,7 +100,7 @@ exports.expenseDelete = function(req, res){
                 });
                 return;
             }
-            if(expense.userId != userId){
+            if(expense._id.equals(req.user._id)){
                 sendJSONresponse(res, 400, {
                     message : 'You are not authorized to delete this expense'
                 });

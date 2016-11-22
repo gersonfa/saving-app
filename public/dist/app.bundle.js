@@ -336,6 +336,26 @@ webpackJsonp([0],{
 	            }
 	        });
 	    };
+	    ExpenseService.prototype.deleteExpense = function (expense) {
+	        var _this = this;
+	        var id = expense._id;
+	        var headers = new http_1.Headers({
+	            'Authorization': this.authenticationService.token,
+	            'Content-Type': 'application/json'
+	        });
+	        var options = new http_1.RequestOptions({ headers: headers });
+	        return this.http.delete("/api/expense/" + id, options)
+	            .map(function (response) {
+	            if (response) {
+	                _this.expenses = _this.expenses.filter(function (x) {
+	                    return x._id !== expense._id;
+	                });
+	                return true;
+	            }
+	            ;
+	            return false;
+	        });
+	    };
 	    ExpenseService = __decorate([
 	        core_1.Injectable(), 
 	        __metadata('design:paramtypes', [index_1.AuthenticationService, http_1.Http])
@@ -669,6 +689,16 @@ webpackJsonp([0],{
 	    };
 	    ExpenseComponent.prototype.updateExpenses = function () {
 	        this.expenses = this.expenseService.expenses;
+	    };
+	    ExpenseComponent.prototype.expenseDelete = function (expense) {
+	        var _this = this;
+	        this.expenseService.deleteExpense(expense)
+	            .subscribe(function (response) {
+	            if (response) {
+	                console.log('Gasto eliminado');
+	                _this.expenses = _this.expenseService.expenses;
+	            }
+	        });
 	    };
 	    ExpenseComponent = __decorate([
 	        core_1.Component({
@@ -1066,8 +1096,8 @@ webpackJsonp([0],{
 	var LineChartComponent = (function () {
 	    function LineChartComponent(expenseService) {
 	        this.expenseService = expenseService;
-	        this.expenses = [];
 	        this.data = [0, 0, 0, 0, 0, 0, 0, 0];
+	        this.dataAvailable = false;
 	        // lineChart
 	        this.lineChartData = [
 	            { data: this.data, label: 'Gastos' }
@@ -1125,6 +1155,47 @@ webpackJsonp([0],{
 	                            break;
 	                    }
 	                });
+	                _this.dataAvailable = true;
+	            }
+	        });
+	    };
+	    LineChartComponent.prototype.updateData = function () {
+	        var _this = this;
+	        this.dataAvailable = false;
+	        this.data = [0, 0, 0, 0, 0, 0, 0, 0];
+	        this.expenseService.getExpenses()
+	            .subscribe(function (response) {
+	            if (response) {
+	                _this.expenseService.expenses.forEach(function (x) {
+	                    switch (x.category) {
+	                        case 'Transporte':
+	                            _this.data[0] += x.amount;
+	                            break;
+	                        case 'Alimentos':
+	                            _this.data[1] += x.amount;
+	                            break;
+	                        case 'Vivienda':
+	                            _this.data[2] += x.amount;
+	                            break;
+	                        case 'Entretenimiento':
+	                            _this.data[3] += x.amount;
+	                            break;
+	                        case 'Servicios':
+	                            _this.data[4] += x.amount;
+	                            break;
+	                        case 'Mascota':
+	                            _this.data[5] += x.amount;
+	                            break;
+	                        case 'Deudas':
+	                            _this.data[6] += x.amount;
+	                            break;
+	                        case 'Familia':
+	                            _this.data[7] += x.amount;
+	                        default:
+	                            break;
+	                    }
+	                });
+	                _this.dataAvailable = true;
 	            }
 	        });
 	    };
@@ -1163,14 +1234,63 @@ webpackJsonp([0],{
 	    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 	};
 	var core_1 = __webpack_require__(3);
-	// webpack html imports
+	var index_1 = __webpack_require__(31);
 	var PieChartComponent = (function () {
-	    function PieChartComponent() {
+	    function PieChartComponent(expenseService) {
+	        this.expenseService = expenseService;
+	        this.monthsNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+	        this.date = new Date;
+	        this.month = this.monthsNames[this.date.getMonth()];
+	        this.data = [0, 0, 0, 0, 0, 0, 0, 0];
+	        this.dataAvailable = false;
 	        // Pie
-	        this.pieChartLabels = ['Presupuesto', 'Alimentos', 'Familia'];
-	        this.pieChartData = [300, 500, 100];
-	        this.pieChartType = 'pie';
+	        this.pieChartLabels = ['Transporte', 'Alimentos', 'Vivienda', 'Entretenimiento', 'Servicios', 'Mascota', 'Deudas', 'Familia'];
+	        this.pieChartData = this.data;
+	        this.pieChartType = 'doughnut';
 	    }
+	    PieChartComponent.prototype.ngOnInit = function () {
+	        var _this = this;
+	        this.expenseService.getExpenses()
+	            .subscribe(function (response) {
+	            if (response) {
+	                _this.expenseService.expenses
+	                    .forEach(function (x) {
+	                    var dateExpense = new Date(x.createdAt);
+	                    var monthExpense = _this.monthsNames[dateExpense.getMonth()];
+	                    if (monthExpense === _this.month) {
+	                        switch (x.category) {
+	                            case 'Transporte':
+	                                _this.data[0] += x.amount;
+	                                break;
+	                            case 'Alimentos':
+	                                _this.data[1] += x.amount;
+	                                break;
+	                            case 'Vivienda':
+	                                _this.data[2] += x.amount;
+	                                break;
+	                            case 'Entretenimiento':
+	                                _this.data[3] += x.amount;
+	                                break;
+	                            case 'Servicios':
+	                                _this.data[4] += x.amount;
+	                                break;
+	                            case 'Mascota':
+	                                _this.data[5] += x.amount;
+	                                break;
+	                            case 'Deudas':
+	                                _this.data[6] += x.amount;
+	                                break;
+	                            case 'Familia':
+	                                _this.data[7] += x.amount;
+	                            default:
+	                                break;
+	                        }
+	                    }
+	                });
+	            }
+	        });
+	        this.dataAvailable = true;
+	    };
 	    // events
 	    PieChartComponent.prototype.chartClicked = function (e) {
 	        console.log(e);
@@ -1183,7 +1303,7 @@ webpackJsonp([0],{
 	            selector: 'pie-chart',
 	            templateUrl: 'app/charts/pie-chart.component.html'
 	        }), 
-	        __metadata('design:paramtypes', [])
+	        __metadata('design:paramtypes', [index_1.ExpenseService])
 	    ], PieChartComponent);
 	    return PieChartComponent;
 	}());

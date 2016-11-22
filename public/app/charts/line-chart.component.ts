@@ -7,13 +7,12 @@ import { Expense } from '../_models/expense';
   templateUrl : 'app/charts/line-chart.component.html'
 })
 export class LineChartComponent implements OnInit {
-  expenses: Expense[] = [];
-  data: number[] = [0,0,0,0,0,0,0,0];
-  
-
   constructor(
     private expenseService : ExpenseService
   ){}
+
+  data: number[] = [0,0,0,0,0,0,0,0];
+  dataAvailable: boolean = false;
 
   ngOnInit(){
     this.expenseService.getExpenses()
@@ -48,10 +47,52 @@ export class LineChartComponent implements OnInit {
                 default:
                   break;
             }
-          });
+          })
+          this.dataAvailable = true;
         }
       })
+
       
+  }
+
+  updateData(){
+    this.dataAvailable = false;
+    this.data = [0,0,0,0,0,0,0,0];
+    this.expenseService.getExpenses()
+      .subscribe(response => {
+        if(response){
+          this.expenseService.expenses.forEach(x => {
+            switch (x.category) {
+              case 'Transporte' :
+                this.data[0] += x.amount;
+                break;
+              case 'Alimentos' :
+                this.data[1] += x.amount;
+                break;
+              case 'Vivienda' :
+                this.data[2] += x.amount;
+                break;
+              case 'Entretenimiento' :
+                this.data[3] += x.amount;
+                break;
+              case 'Servicios' :
+                this.data[4] += x.amount;
+                break;
+              case 'Mascota' :
+                this.data[5] += x.amount;
+                break;
+              case 'Deudas' :
+                this.data[6] += x.amount;
+                break;
+              case 'Familia' :
+                this.data[7] += x.amount;
+                default:
+                  break;
+            }
+          })
+          this.dataAvailable = true;
+        }
+      })
   }
 
   // lineChart

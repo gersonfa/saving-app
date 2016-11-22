@@ -48,6 +48,25 @@ export class ExpenseService {
                     return false;
                 }
             });
+    }
 
+    deleteExpense(expense : Expense): Observable<Boolean>{
+        let id = expense._id;
+        let headers = new Headers({
+            'Authorization': this.authenticationService.token,
+            'Content-Type': 'application/json'
+        })
+        let options = new RequestOptions({headers:headers});
+
+        return this.http.delete(`/api/expense/${id}`,options)
+            .map((response : Response) => {
+                if(response) {
+                    this.expenses = this.expenses.filter( x => {
+                        return x._id !== expense._id;
+                    })
+                    return true
+                };
+                return false;
+            });
     }
 }

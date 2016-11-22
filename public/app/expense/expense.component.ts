@@ -7,6 +7,7 @@ import { Expense } from '../_models/expense';
 })
 export class ExpenseComponent implements OnInit {
     expenses: Expense[] = [];
+    
     constructor(
         private expenseService : ExpenseService
     ){}
@@ -22,6 +23,17 @@ export class ExpenseComponent implements OnInit {
 
     updateExpenses(){
         this.expenses = this.expenseService.expenses;
+    }
+
+    expenseDelete(expense : Expense){
+        this.expenseService.deleteExpense(expense)
+            .subscribe(response => {
+                if (response){
+                    console.log('Gasto eliminado')
+                    this.expenses = this.expenseService.expenses;
+                }
+            })
+        
     }
 
 }

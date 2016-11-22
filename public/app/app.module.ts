@@ -16,6 +16,7 @@ import { AuthGuard } from './_guards/index';
 import { NgSemanticModule } from 'ng-semantic';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { LineChartComponent, PieChartComponent } from './charts/index';
+//import { InfoComponent } from './info/info.component';
 
 
 @NgModule({
